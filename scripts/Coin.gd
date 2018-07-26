@@ -1,5 +1,6 @@
 extends Area2D
 var screensize
+onready var coinsize = $CollisionShape2D.get_shape().radius * self.scale
 
 func _ready():
 	$Timer.wait_time = rand_range(2, 6)
@@ -28,6 +29,6 @@ func _on_Timer_timeout():
 	$AnimatedSprite.frame = 0
 	$AnimatedSprite.play()
 
-func _on_Coin_area_entered( area ):
+func _on_Coin_area_entered(area):
 	if area.is_in_group("obstacles"):
-		position = Vector2(rand_range(0, screensize.x), rand_range(0, screensize.y))
+		position = Vector2(rand_range(coinsize.x, screensize.x - coinsize.x), rand_range(coinsize.y, screensize.y - coinsize.y))

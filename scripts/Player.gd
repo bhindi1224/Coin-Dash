@@ -4,19 +4,16 @@ signal pickup
 signal hurt
 
 export (int) var speed
-export var buffer = 5
+var invulnerable = false
 var velocity = Vector2()
-var screensize = Vector2(480, 720)
-onready var playersize = $CollisionShape2D.get_shape().get_extents()
-
-func _ready():
-	print(playersize)
+var screensize
+onready var playersize = $CollisionShape2D.get_shape().get_extents() * self.scale
 
 func _process(delta):
 	get_input()
 	position += velocity * delta
-	position.x = clamp(position.x, playersize.x + buffer, screensize.x - playersize.x - buffer)
-	position.y = clamp(position.y, playersize.y + buffer, screensize.y - playersize.y - buffer)
+	position.x = clamp(position.x, playersize.x / 2, screensize.x - playersize.x / 2)
+	position.y = clamp(position.y, playersize.y / 2, screensize.y - playersize.y / 2)
 	if velocity.length() > 0:
 		$AnimatedSprite.animation = "run"
 		$AnimatedSprite.flip_h = velocity.x < 0
@@ -46,6 +43,12 @@ func die():
 	$AnimatedSprite.animation = "hurt"
 	set_process(false)
 
+func new_level():
+	invulnerable = true
+	$Invulnerability.start()
+	set_process(false)
+	$NewLevel.start()
+
 func _on_Player_area_entered(area):
 	if area.is_in_group("coins"):
 		area.pickup()
@@ -55,6 +58,13 @@ func _on_Player_area_entered(area):
 		area.pickup()
 		emit_signal("pickup", "powerup")
 		
-	if area.is_in_group("obstacles"):
+	if area.is_in_group("obstacles") and not invulnerable:
 		emit_signal("hurt")
 		die()
+
+func _on_Invulnerability_timeout():
+	invulnerable = false
+
+
+func _on_NewLevel_timeout():
+	set_process(true)

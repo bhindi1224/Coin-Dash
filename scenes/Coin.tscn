@@ -13,7 +13,6 @@
 [ext_resource path="res://assets/coin/coin-frame-10.png" type="Texture" id=11]
 [ext_resource path="res://assets/coin/coin-frame-11.png" type="Texture" id=12]
 
-
 [sub_resource type="SpriteFrames" id=1]
 
 animations = [ {
@@ -28,7 +27,7 @@ animations = [ {
 custom_solver_bias = 0.0
 radius = 25.024
 
-[node name="Coin" type="Area2D" index="0" groups=[
+[node name="Coin" type="Area2D" groups=[
 "coins",
 ]]
 
@@ -40,6 +39,7 @@ angular_damp = 1.0
 audio_bus_override = false
 audio_bus_name = "Master"
 script = ExtResource( 1 )
+_sections_unfolded = [ "Transform" ]
 __meta__ = {
 "_edit_group_": true
 }
@@ -54,6 +54,7 @@ _sections_unfolded = [ "Transform" ]
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." index="1"]
 
 shape = SubResource( 2 )
+_sections_unfolded = [ "Transform" ]
 
 [node name="Tween" type="Tween" parent="." index="2"]
 
